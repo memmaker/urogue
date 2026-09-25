@@ -1319,6 +1319,7 @@ check_level(void)
     max_stats.s_hpt += add;
     pstats.s_hpt += add;
 
+    be_sound("level");
     msg("Welcome, %s, to level %d.",
         cnames[player.t_ctype][min(pstats.s_lvl - 1, 14)], pstats.s_lvl);
 
@@ -1607,6 +1608,7 @@ hit(char *ee)
         case 12:  s = "deal a wacking great blow to";   break;
     }
 
+    be_sound("hit");
     msg("You %s the %s.", s, prname(ee));
 }
 
@@ -1632,6 +1634,7 @@ miss(char *ee)
         case 4:   s = "wildly windmill around";        break;
         case 5:   s = "almost fumble while missing";   break;
     }
+    be_sound("miss");
 
     msg("You %s the %s.", s, prname(ee));
 }
@@ -1819,6 +1822,7 @@ thunk(struct object *weap, char *mname)
 void
 m_thunk(struct object *weap, char *mname)
 {
+    be_sound("mon_hit");
     if (fighting)
         return;
 
@@ -1940,8 +1944,10 @@ killed(struct thing *killer, struct linked_list *item, int print_message,
 
     if (print_message && visible)
     {
-        if (is_player)
+        if (is_player) {
+            be_sound("kill");
             addmsg("You have defeated ");
+        }
         else
             addmsg("The %s has defeated ",
                 monsters[killer->t_index].m_name);

@@ -154,6 +154,7 @@ death(int monst)
     }
 
     time(&date);
+    be_sound("death");
     lt = localtime(&date);
     clear();
     wclear(cw);

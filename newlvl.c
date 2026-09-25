@@ -40,6 +40,8 @@ new_level(LEVTYPE ltype, int special)
     int     going_down = TRUE;
     coord   stairs;
 
+    explore_reset();
+
     /* Start player off right */
 
     turn_off(player, ISHELD);

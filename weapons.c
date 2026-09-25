@@ -380,6 +380,7 @@ wield(void)
 
     wield_ok(&player, obj, TRUE);
 
+    be_sound("wield");
     msg("You are now wielding %s.", inv_name(obj, LOWERCASE));
 
     cur_weapon = obj;

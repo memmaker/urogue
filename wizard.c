@@ -84,6 +84,7 @@ teleport(void)
     int is_lit = FALSE; /* For saving room light state */
     int rand_position = TRUE;
 
+    be_sound("teleport");
     c = hero;
 
     mvwaddch(cw, hero.y, hero.x, mvwinch(stdscr, hero.y, hero.x));

@@ -515,6 +515,7 @@ buy_more:
             ++player.t_trans;
 		}
 		
+        be_sound("store5");
         trans_line();   /* show remaining deals */
 
         switch(which_type)

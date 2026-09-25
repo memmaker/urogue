@@ -48,6 +48,7 @@ wear(void)
     cur_armor = obj;
     obj->o_flags |= ISKNOW;
 
+    be_sound("wield");
     msg("You are now wearing %s.", inv_name(obj, TRUE));
 
     return;

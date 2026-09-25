@@ -382,6 +382,7 @@ eat(void)
 
     if ((obj = get_object(pack, "eat", FOOD, NULL)) == NULL)
         return;
+    be_sound("eat");
 
     switch (obj->o_which)
     {
@@ -1104,6 +1105,7 @@ feed_me(int hunger)
             break;
 
         case  F_HUNGRY:
+            be_sound("hungry");
             charp = f_hungry[rnd(sizeof(f_hungry) /
                 sizeof(char *))];
             break;

@@ -120,12 +120,23 @@ command(void)
             }
             else if (count)
                 ch = repcommand;
+            else if (explore_mode && (ch = explore_step()) != 0)
+                ;
             else
             {
-                ch = readchar();
+                inv_pick = NULL;
+                if (inv_again && !(inv_again = 0) && !monster_in_view())
+                    ch = 'i';   /* reopen the inventory (RVIP 3c) */
+                else {
+                    wc_cmd_prompt = 1;  /* web autosave may run now */
+                    ch = readchar();
+                    wc_cmd_prompt = 0;
+                }
 
                 if (mpos != 0 && !running)
                     msg("");    /* Erase message if its there */
+                if (ch == '\r' || ch == '\n') ch = cmd_menu();
+                if (ch == 'i') ch = inv_menu();
             }
         }
         else
@@ -315,11 +326,15 @@ command(void)
                     break;
                 case '>':
                     after = FALSE;
-                    d_level();
+                    if (explore_stairs('>')) d_level();
                     break;
                 case '<':
                     after = FALSE;
-                    u_level();
+                    if (explore_stairs('<')) u_level();
+                    break;
+                case 'x':
+                    after = FALSE;
+                    explore_mode = 'x';
                     break;
                 case '?':
                     after = FALSE;
@@ -1212,6 +1227,7 @@ d_level(void)
     }
 
     level++;
+    be_sound("stairs_down");
     new_level(NORMLEV,0);
 
     if (no_phase)
@@ -1234,6 +1250,7 @@ u_level(void)
                  (on(player, CANINWALL)
             && (is_wearing(R_LEVITATION) || on(player, CANFLY)))))
     {
+        be_sound("stairs_up");
         if (--level == 0)
             total_winner();
         else if (rnd(wizard ? 3 : 15) == 0)

@@ -52,6 +52,7 @@ quaff(struct thing *quaffer, int which, int flags)
     {
         if ((item = get_item("quaff", POTION)) == NULL)
             return;
+        be_sound("quaff");
 
         obj = OBJPTR(item);
 

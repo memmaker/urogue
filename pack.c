@@ -218,6 +218,7 @@ add_pack(struct linked_list *item, int print_message)
             if (!terse)
                 addmsg("You found ");
 
+            be_sound("money1");
             msg("%d gold pieces.", obj->o_count);
         }
 
@@ -480,6 +481,45 @@ get_object(struct linked_list *container, char *purpose, int type, int (*bff_p)(
         msg("You seem to have nothing to %s.", purpose);
         after = FALSE;
         return(NULL);
+    }
+
+    /* RVIP 3c: the item chosen in the inventory, else a list with a cursor */
+    if (container == pack && inv_pick)
+    {
+        obj_p = OBJPTR(inv_pick);
+        inv_pick = NULL;
+        if (type == 0 || obj_p->o_type == type)
+            return(obj_p);
+        msg("You can't %s that!", purpose);
+        after = FALSE;
+        return(NULL);
+    }
+    if (container == pack && purpose && bff_p == NULL)
+    {
+        struct linked_list *l, *it[82];
+        char *items[82], keys[82], text[82][2 * LINELEN];
+        char title[2 * LINELEN];
+        int n = 0, i, och = 'a';
+
+        for (l = pack; l && n < 82; l = next(l), och = och == 'z' ? 'A' : och + 1)
+        {
+            if (type && OBJPTR(l)->o_type != type)
+                continue;
+            sprintf(text[n], "%c) %s", och, inv_name(OBJPTR(l), FALSE));
+            items[n] = text[n]; keys[n] = och; it[n++] = l;
+        }
+        sprintf(title, "%s what?", purpose);
+        title[0] = toupper(title[0]);
+        i = menu(title, items, keys, n);
+        touchwin(cw);                   /* closes the list */
+        wrefresh(cw);
+        if (i < 0)
+        {
+            after = FALSE;
+            msg("");
+            return(NULL);
+        }
+        return(OBJPTR(it[i]));
     }
 
     while (obj_p == NULL)
