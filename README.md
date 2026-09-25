@@ -7,7 +7,9 @@ Restoration Project: https://github.com/RoguelikeRestorationProject/urogue/tree/
 (commit 1 is the untouched upstream; everything after it is ours).
 
 - `port:` builds on macOS/arm64 and WebAssembly, curses shim (`port/`) with
-  an X11 frontend, NetHack tiles (`port/mktiles.py`); fixes an upstream bug
+  an X11 frontend, NetHack tiles (`port/mktiles.py`), DawnLike as a second
+  set (`port/mkdawn.py`; DragonDePlatino, palette DawnBringer, CC BY 4.0;
+  web: *Tiles* button, desktop: `TILESET=dawn ./play.sh`); fixes an upstream bug
   that made every save unloadable (`ur_read_room` read an int as a short).
 - `RVIP:` auto-explore (`x`), `<`/`>` walk to known stairs, Enter command
   menu, inventory with a cursor, sound events (`rvip.c` + small hooks).
