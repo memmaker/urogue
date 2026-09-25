@@ -6,9 +6,9 @@ Restoration Project: https://github.com/RoguelikeRestorationProject/urogue/tree/
 **Our changes:** https://github.com/memmaker/urogue/compare/8dec2be...master
 (commit 1 is the untouched upstream; everything after it is ours).
 
-- `port:` builds on macOS/arm64 and WebAssembly: prototypes, 64-bit fixes
-  (daemon arguments, 4-byte longs in saves), curses shim (`port/`) with an X11
-  frontend, NetHack tiles (`port/mktiles.py`).
+- `port:` builds on macOS/arm64 and WebAssembly, curses shim (`port/`) with
+  an X11 frontend, NetHack tiles (`port/mktiles.py`); fixes an upstream bug
+  that made every save unloadable (`ur_read_room` read an int as a short).
 - `RVIP:` auto-explore (`x`), `<`/`>` walk to known stairs, Enter command
   menu, inventory with a cursor, sound events (`rvip.c` + small hooks).
 - `web:` browser build (`web/build.sh`), played at https://ruzzoli.de/roguelikes/urogue/
