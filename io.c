@@ -21,6 +21,8 @@
 #include <stdarg.h>
 #include "rogue.h"
 
+int auto_more = 1;	/* RVIP: --More-- does not wait; the Messages pane keeps the history */
+
 char prbuf[2 * LINELEN];    /* Buffer for sprintfs                      */
 static char mbuf[2*LINELEN];  /* Current message buffer        */
 static int newpos = 0;       /* index in mbuf to end of msg   */
@@ -114,7 +116,7 @@ endmsg(void)
         wmove(cw, 0, mpos);
         wprintw(cw, (char *) morestr);
         wrefresh(cw);
-        wait_for(' ');
+        if (!auto_more) wait_for(' ');
     }
 
     mvwprintw(cw, 0, 0, mbuf);
