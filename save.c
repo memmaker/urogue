@@ -76,6 +76,10 @@ save_game(void)
     /* write out [compressed?] file */
 
     save_file(savefd);
+    fclose(savefd);
+#ifdef __EMSCRIPTEN__
+    wc_saved = TRUE;            /* keep the file (be_web.c) */
+#endif
     return(TRUE);
 }
 
@@ -102,7 +106,11 @@ restore(char *file)
      * for as long as possible
      */
 
+#ifdef __EMSCRIPTEN__           /* web: kept as the autosave, removed at game end */
+    if (0)
+#else
     if (remove(file) < 0)
+#endif
     {
         printf("Cannot unlink file\n");
         return(FALSE);

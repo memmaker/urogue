@@ -167,10 +167,21 @@ main(int argc, char *argv[])
     cw = newwin(LINES, COLS, 0, 0);
     mw = newwin(LINES, COLS, 0, 0);
     hw = newwin(LINES, COLS, 0, 0);
+    wc_mapwin = cw;
+
+    if (file_name[0] == '\0') {        /* RVIP: default save file in $HOME */
+        strcpy(file_name, md_gethomedir());
+        strcat(file_name, "urogue.sav");
+    }
 
     if (argc == 2 && argv[1][0] != '\0' && !restore(argv[1]))
         /* Note: restore returns on error only */
         exit(1);
+#ifdef __EMSCRIPTEN__
+    /* web: continue the autosave */
+    if (argc < 2 && access(file_name, 0) == 0 && !restore(file_name))
+        exit(1);
+#endif
 
     waswizard = wizard; /* set wizard flags */
 
