@@ -55,7 +55,10 @@ OBJS		  = armor.o \
 		verify.o \
 		vers.o \
 		weapons.o \
-		wizard.o
+		wizard.o \
+		rvip.o \
+		mdport.o \
+		xcrypt.o
 
 PROGRAM 	  = ur
 
@@ -103,7 +106,10 @@ CFILES		  = armor.c \
 		verify.c \
 		vers.c \
 		weapons.c \
-		wizard.c
+		wizard.c \
+		rvip.c \
+		mdport.c \
+		xcrypt.c
 
 MISC=           Makefile README LICENSE.TXT history.txt TODO
 
@@ -165,3 +171,9 @@ dist.djgpp:
 	groff -man -Tascii urogue.6 | sed -e 's/.\x08//g' > urogue.cat
 	rm -f $(DISTNAME)-djgpp.zip
 	zip $(DISTNAME)-djgpp.zip urogue.exe urogue.cat README LICENSE.TXT
+
+# macOS/XQuartz build with the curses shim and NetHack tiles (RVIP)
+XFLAGS = -O2 -g -std=gnu89 -w -Wno-implicit-function-declaration -Wno-implicit-int -Wno-return-type -Wno-int-conversion -Wno-incompatible-pointer-types -Iport -I/opt/X11/include -I/opt/X11/include/freetype2
+PORTSRC = port/wcurses.c port/tiles.c port/be_x11.c
+urogue-x11: $(CFILES) $(HDRS) $(PORTSRC) port/curses.h port/tilemap.h
+	$(CC) $(XFLAGS) $(EXTRA) $(CFILES) $(PORTSRC) -L/opt/X11/lib -lX11 -lXft -lfontconfig -o $@

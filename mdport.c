@@ -275,7 +275,9 @@ md_gethomedir()
     struct passwd *pw;
     pw = getpwuid(getuid());
 
-    h = pw->pw_dir;
+    h = getenv("HOME");         /* RVIP: $HOME first, so play.sh can move saves */
+    if (h == NULL || *h == '\0')
+        h = pw->pw_dir;
 
     if (strcmp(h,"/") == 0)
         h = NULL;
@@ -1040,6 +1042,21 @@ md_readchar(WINDOW *win)
     int lastch = 0;
     int mode = M_NORMAL;
     int mode2 = M_NORMAL;
+#ifdef XR_SHIM
+    /* curses shim (port/): keys arrive decoded, no escape sequences */
+    switch (ch = wgetch(win)) {
+        case KEY_LEFT:  return 'h';
+        case KEY_RIGHT: return 'l';
+        case KEY_UP:    return 'k';
+        case KEY_DOWN:  return 'j';
+        case KEY_HOME:  case KEY_A1: return 'y';
+        case KEY_PPAGE: case KEY_A3: return 'u';
+        case KEY_END:   case KEY_C1: return 'b';
+        case KEY_NPAGE: case KEY_C3: return 'n';
+        case KEY_B2:    return '.';
+    }
+    return ch;
+#endif
 
     for(;;)
     {

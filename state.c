@@ -146,6 +146,7 @@ unsigned long total  = 0;
 WINDOW  *cw;                        /* Window that the player sees      */
 WINDOW  *hw;                        /* Used for the help command        */
 WINDOW  *mw;                        /* Used to store mosnters           */
+WINDOW  *msgw;                      /* RVIP: none, messages go on cw row 0 */
 
 /* options.o    */
 /* game options */
@@ -369,7 +370,7 @@ ur_read_room(FILE *savef)
 
     r->r_flags = ur_read_int(savef);
     r->r_nexits = ur_read_int(savef);
-    r->r_flags = ur_read_short(savef);
+    r->r_flags = ur_read_int(savef);   /* RVIP: written as an int */
 
     return(r);
 }

@@ -1,0 +1,7 @@
+
+# RVIP port: build output, binaries, local saves
+web/dist/
+/urogue
+/urogue-x11
+*.dSYM/
+*.o

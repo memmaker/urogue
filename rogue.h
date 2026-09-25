@@ -26,6 +26,15 @@
 #include "lint-curses.h"
 #endif
 
+/* sound events (port/curses.h); silent in the plain ncurses build */
+#ifndef XR_SHIM
+#define be_sound(event) ((void) 0)
+#endif
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#define daemon ur_daemon   /* the daemon type; libc has a daemon() function */
+
 #define SHOTPENALTY 2       /* In line of sight of missile */
 #define DOORPENALTY 1       /* Moving out of current room */
 
@@ -1813,3 +1822,10 @@ int md_readchar(WINDOW *win);
 
 #define NOOP(x) (x += 0)
 #define CCHAR(x) ( (char) (x & A_CHARTEXT) )
+/* RVIP port */
+extern int explore_mode;
+int explore_step(), explore_stairs(), monster_in_view(), cmd_menu(), inv_menu(), menu();
+void explore_reset();
+extern struct linked_list *inv_pick;
+extern int inv_again;
+char *md_gethomedir(void);
