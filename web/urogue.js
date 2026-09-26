@@ -438,7 +438,10 @@
 			FS.chdir('/urogue');
 			Module.ENV.HOME = DIR;               /* urogue.sav (md_gethomedir) */
 			Module.ENV.ROGUEHOME = DIR;          /* score file */
-			Module.ENV.USER = 'rogue';
+			var who = '';                        /* whoami comes from $USER (it overrides OPTIONS name=), so ask once */
+			try { who = localStorage.getItem('urogue-name') || ''; } catch (err) { /* no storage */ }
+			if (!who) { who = (prompt('What is your name, adventurer?', '') || '').replace(/[,\n]/g, '').trim().slice(0, 30); try { if (who) localStorage.setItem('urogue-name', who); } catch (err) { /* no storage */ } }
+			Module.ENV.USER = who || 'rogue';
 			Module.addRunDependency('idbfs');
 			FS.syncfs(true, function (err) {
 				if (err) status('Could not read saved games from IndexedDB (' + err + '). Saving may not work in this browser mode.', true);

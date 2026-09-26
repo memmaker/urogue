@@ -206,6 +206,18 @@ score(long amount, int lvl, int flags, int monst) /*ARGSUSED*/
 
     char    *packend;
 
+    if (flags != SCOREIT)       /* RVIP run beacon: killer without article */
+    {
+        char *k = NULL;
+        if (flags == KILLED)
+        {
+            k = killname(monst, buf);
+            if (!strncmp(k, "a ", 2)) k += 2;
+            else if (!strncmp(k, "an ", 3)) k += 3;
+        }
+        be_run_end(flags == KILLED ? "death" : flags == CHICKEN ? "quit" : "win", k, amount, lvl);
+    }
+
     if (flags != WINNER && flags != TOTAL && flags != SCOREIT)
     {
         if (flags == CHICKEN)
