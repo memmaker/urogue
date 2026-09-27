@@ -69,6 +69,12 @@ def pick(game, slot):
             if d in pos: return d
 
 img = Image.new('RGBA', Image.open(os.path.join(HERE, 'tiles.png')).size, (0, 0, 0, 0))
+img1 = img.copy()                   # frame 1: DawnLike's <sheet>1.png where it has one
+def sprite1(name):
+    sheet, c, r = pos[name]
+    p = os.path.join(TS, 'DawnLike', sheet.replace('0.png', '1.png'))
+    if not sheet.endswith('0.png') or not os.path.exists(p): return sprite(name)
+    return Image.open(p).convert('RGBA').crop((c*16, r*16, c*16+16, r*16+16))
 filled, missing = {}, []
 def put(slot, game=None, name=None):
     if slot < 0 or slot in filled: return
@@ -76,6 +82,7 @@ def put(slot, game=None, name=None):
     if not name: missing.append('%s [%s]' % (game, M.names[slot][0])); return
     filled[slot] = name
     img.paste(sprite(name), ((slot % M.PER_ROW) * 16, (slot // M.PER_ROW) * 16))
+    img1.paste(sprite1(name), ((slot % M.PER_ROW) * 16, (slot // M.PER_ROW) * 16))
 
 for n, s in zip(M.mons, M.mon_tiles): put(s, n)
 for s in arr('class_tile'): put(s)
@@ -111,6 +118,7 @@ for cls, ls, suffix in (('POTION', looks('rainbow'), ' potion'), ('RING', looks(
 
 if missing: sys.exit('no DawnLike sprite:\n' + '\n'.join(missing))
 img.save(os.path.join(HERE, 'tiles-dawn.png'))
+img1.save(os.path.join(HERE, 'tiles-dawn-1.png'))
 open(os.path.join(HERE, 'tiles-dawn.rgba'), 'wb').write(
     img.size[0].to_bytes(4, 'little') + img.size[1].to_bytes(4, 'little') + img.tobytes())
 print(len(filled), 'slots, all DawnLike')
