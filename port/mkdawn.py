@@ -11,7 +11,8 @@ import itertools, os, re, sys
 from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.expanduser('~/Games/rvip-tools/tilesets'))
+TS = os.environ.get('RVIP_TILESETS') or os.path.expanduser('~/Games/rvip-tools/tilesets')
+sys.path.insert(0, TS)
 from dawnlike_preview import pos, sprite
 sys.path.insert(0, HERE)
 import mktiles as M
@@ -83,6 +84,11 @@ for n, s in zip(M.ARMOR, arr('armor_tile')): put(s, n)
 for n, s in zip(M.RELIC, arr('relic_tile')): put(s, n)
 for k, n in FIXED.items(): put(dfn('T_' + k), name=n)
 for s in arr('terrain_tile') + arr('generic_tile'): put(s)
+# autotiled floors: slot base+m is bordered on the sides of mask m (n8 s4 w2 e1)
+for m in range(16):
+    sides = ''.join(c for b, c in ((8, 'n'), (4, 's'), (2, 'w'), (1, 'e')) if m & b) or 'c'
+    put(dfn('T_FLOORS') + m, name='day tile floor ' + sides)
+    put(dfn('T_CORRS') + m, name='night stone floor ' + sides)
 
 # random looks: tiles.c hashes the look (first letter lowered, as init.c stores
 # it) into a slot range; each slot gets the sprite named after a look landing
