@@ -1807,6 +1807,7 @@ thunk(struct object *weap, char *mname)
 {
     if (fighting)
         return;
+    be_sound("shoot_hit");
 
     if (weap->o_type == WEAPON)
         msg("The %s hits the %s.", weaps[weap->o_which].w_name, prname(mname));
@@ -1842,6 +1843,7 @@ bounce(struct object *weap, char *mname)
 {
     if (fighting)
         return;
+    be_sound("shoot_miss");
 
     if (weap->o_type == WEAPON)
         msg("The %s misses the %s.",weaps[weap->o_which].w_name,prname(mname));
