@@ -89,15 +89,6 @@
 		var b = txt[P_MSG] && txt[P_MSG].el.parentNode;
 		if (b && xr.follow == null) xr.follow = b.scrollTop + b.clientHeight >= b.scrollHeight - 4;
 	}
-	/* Messages at its end, kept by its scroll events: A−/A+ changes the content height
-	 * without a scroll, so zoom.msg puts it back at the end if it was there */
-	var msgEnd = true;
-	function msgBody() { return txt[P_MSG] && txt[P_MSG].el.parentNode; }
-	document.addEventListener('scroll', function (e) {
-		var b = msgBody();
-		if (e.target === b) msgEnd = b.scrollTop + b.clientHeight >= b.scrollHeight - 4;
-	}, true);
-	function zoomMsg() { var b = msgBody(); if (b && msgEnd) b.scrollTop = b.scrollHeight; popFont(); }
 	function popFont() { $('pop').style.fontSize = RvipWM.fontSize('msg') + 'px'; placePop(); }
 	function placePop() { if (!$('pop').hidden && rects.map) RvipWM.popup($('pop'), { x: L.tile }); }
 
@@ -240,7 +231,7 @@
 			save: function (st) { L.wm = st; saveLayout(); },
 			layout: function (r) { rects = r; fit(P_MAP); placePop(); var mb = txt[P_MSG] && txt[P_MSG].el.parentNode; if (mb) mb.scrollTop = mb.scrollHeight; },
 			/* A- / A+: the map steps its tiles; the text windows are the WM's; the pop-up follows Messages */
-			zoom: { map: function (s, d) { zoomMap(d); }, msg: zoomMsg },
+			zoom: { map: function (s, d) { zoomMap(d); }, msg: popFont },
 			onReset: resetLayout
 		});
 		wm.apply();
