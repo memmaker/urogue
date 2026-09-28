@@ -30,8 +30,8 @@
 */
 
 #if defined(_WIN32)
-#include <Windows.h>
-#include <Lmcons.h>
+#include <windows.h>
+#include <lmcons.h>
 #include <process.h>
 #pragma warning( disable: 4201 ) 
 #include <shlobj.h>

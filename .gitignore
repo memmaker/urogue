@@ -7,3 +7,5 @@ web/dist/
 *.o
 save/
 __pycache__/
+urogue-term
+urogue-term.exe
