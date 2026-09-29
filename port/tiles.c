@@ -236,12 +236,13 @@ void wc_inv(WINDOW *p)
         wclrtoeol(p);
         wc_rowattr(P_INV, y, wc_kind(OBJPTR(l)->o_type)->css, ic ? wc_obj_tile(OBJPTR(l)) : -1);
     }
-    for (; y < p->maxy; y++) { wc_rowattr(P_INV, y, "", -1); if (y < p->maxy - 1) { wmove(p, y, 0); wclrtoeol(p); } }
 #ifdef MAXPACK
     mvwprintw(p, y, 0, "%d/%d items, %ld gold", inpack, MAXPACK, (long) purse);
 #else
     mvwprintw(p, y, 0, "%ld gold", (long) purse);
 #endif
     wclrtoeol(p);
+    wc_rowattr(P_INV, y, "", -1);
+    for (y++; y < p->maxy; y++) { wc_rowattr(P_INV, y, "", -1); wmove(p, y, 0); wclrtoeol(p); }
     memcpy(prbuf, save, sizeof save);
 }
